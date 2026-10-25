@@ -1,6 +1,6 @@
 # Local validation for 1.6.0 candidate
 
-This is a cross-compiled local candidate, not a Windows-qualified or published release.
+This document records the historical cross-compiled local candidate. It is superseded by the Windows CI release at https://github.com/TechSavage1989/Print-Quote-Calculator/releases/tag/v1.6.0, source 65eca125de6fe45c0c0772c90f8e5de7c505a556. See DEVELOPMENT_HANDOFF.md for the later successful hosted Windows tests and verified release bytes. The candidate digest below is not the official release EXE digest.
 
 | Check | Result |
 |---|---|

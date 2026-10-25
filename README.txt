@@ -1,4 +1,4 @@
-Publication is authorized. Release builds are gated on hosted Windows CI. Read README.md and DEVELOPMENT_HANDOFF.md for updater behavior and release status.
+Version 1.6.0 is published after passing hosted Windows CI. Read README.md and DEVELOPMENT_HANDOFF.md for updater behavior and release status.
 
 3D Print Quote Calculator 1.6.0 - WebView2 Edition
 
@@ -68,7 +68,7 @@ Run test_uv.cjs with the same test environment for UV total/per-channel ink cost
 
 check_placement.cpp is a portable test of placement persistence and monitor recovery. Build with a standard C++17 compiler and -Ivendor.
 
-The executable was cross-compiled and its resources were verified. Windows execution, native dialogs, runtime startup timing, display rendering and printer behavior could not be tested in this environment.
+The released executable was built in Windows CI. Native install/rollback, real timers/focus, and actual WebView2 startup/render/JS health checks passed. Manual Windows 10/11 file dialogs, printers, display configurations, cross-volume installs and a genuine release-to-release upgrade remain unverified. See DEVELOPMENT_HANDOFF.md for the exact release commit and CI evidence.
 
 NOTICES
 The original Microsoft WebView2 SDK header and signed x64 loader are from Microsoft.Web.WebView2 1.0.3537.50. License and notices are retained in sdk/. uuid_mingw.h and EventToken.h supply MinGW compatibility declarations without modifying the official header or loader. nlohmann/json and pdf-lib license notices are retained under vendor/ and web/vendor/. MinGW/GCC runtime support libraries use the GCC Runtime Library Exception. Application code and icon source are included for editing.

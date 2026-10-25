@@ -6,7 +6,7 @@ Read AGENTS.md and DEVELOPMENT_HANDOFF.md before continuing development.
 
 ## Current status
 
-Version 1.6.0 continues the delivered 1.5.1 baseline. Public source and release publication are authorized. A release is published only after the Windows workflow passes; check its exact commit and release assets before treating a build as qualified. Cross-compilation and JavaScript tests alone do not establish Windows readiness.
+Version 1.6.0 is published at [the GitHub release](https://github.com/TechSavage1989/Print-Quote-Calculator/releases/tag/v1.6.0). [Windows CI](https://github.com/TechSavage1989/Print-Quote-Calculator/actions/runs/40157955595) passed native install/rollback, real timer/focus tests and actual WebView2 startup/render health checks. Public release downloads and hashes were verified. See DEVELOPMENT_HANDOFF.md for the exact source commit and remaining manual/release-to-release qualification.
 
 ## Run and upgrade
 

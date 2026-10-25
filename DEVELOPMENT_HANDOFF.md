@@ -6,8 +6,8 @@
 - Repository: https://github.com/TechSavage1989/Print-Quote-Calculator, confirmed public.
 - Repository inspected at main cdd2d4b455b94eb773514d4a311600db20982a49: README only; no source, handoff, releases or CI history.
 - Latest earlier delivered baseline: 1.5.1, sourced from this conversation's editable WebView2 tree. Windows execution was not confirmed.
-- Current continuation: 1.6.0. The user explicitly authorized public source, Windows CI and release publication by replying "publish" to the prepared proposal. Source publication is in progress; CI/release results must be recorded after verification. Do not confuse the earlier cross-compiled local candidate with the Windows CI artifact.
-- Intended single-repository update feed: https://github.com/TechSavage1989/Print-Quote-Calculator/releases/latest/download/update.json . It does not exist until the first authorized release is published. No authenticated updater or separate public binary repository is configured. If the owner chooses private source instead, resolve update authentication/feed architecture explicitly before publishing anything.
+- Current released baseline: v1.6.0, exact source/tag commit 65eca125de6fe45c0c0772c90f8e5de7c505a556. The user explicitly authorized public source, Windows CI and release publication by replying "publish". Windows CI run 40157955595 passed and published the release. The Windows-built artifact supersedes the earlier cross-compiled local candidate.
+- Intended single-repository update feed: https://github.com/TechSavage1989/Print-Quote-Calculator/releases/latest/download/update.json . It is published and was fetched successfully over HTTPS, serving the v1.6.0 manifest with the verified EXE digest. No authenticated updater or separate public binary repository is configured. If the owner chooses private source instead, resolve update authentication/feed architecture explicitly before publishing anything.
 
 ## Approved scope
 
@@ -69,7 +69,7 @@ python3 scripts/verify_artifacts.py
 
 The Windows workflow builds fixture EXEs and tests/update_native.exe. The native suite includes a missing-HWND timer negative control, real timers/elapsed time, startup single flight, focus return after two minutes, five-minute polling, actual HTTPS checks, x64 PE identity, helper replacement, unhealthy-child rollback, custom launch filename, one backup, preserved settings sentinel and deferred cleanup. It takes about nine minutes. The separate Windows smoke script starts the actual WebView2 calculator and requires visible-window/render/JS health confirmation. Test fixtures and QA executables never enter release packages.
 
-Local validation performed in this environment is recorded in LOCAL_VALIDATION.md. All Windows executables are cross-compiled here. Native Windows, hosted CI, real cross-volume replacement, shared-IP network throttling, TLS/HTTP error branches, and a real previous-release-to-hosted-new-release upgrade remain unverified. Do not report these as passed.
+Local validation performed in this environment is recorded in LOCAL_VALIDATION.md. The earlier local candidate was cross-compiled. The released EXE was subsequently built and tested on hosted Windows Server 2025. Native install/rollback fixtures, real timer/focus checks, actual HTTPS error handling, and the actual WebView2 app startup/render/JS health check all passed. Real cross-volume replacement, controlled shared-IP throttling/TLS/ETag transport scenarios, manual Windows 10/11 UI/native file-dialog/printer checks, and a genuine previous-release-to-next-release upgrade remain unverified. Do not report these as passed.
 
 ## Windows acceptance checklist before claiming readiness
 
@@ -83,4 +83,19 @@ Local validation performed in this environment is recorded in LOCAL_VALIDATION.m
 
 ## Publication validation history
 
-The first hosted Windows run (40157804260, source a602ab249e8e3ab639f9285c50f367497b6e81eb) failed before compilation because build_assets.py relied on the platform default cp1252 text encoding. This is the negative control. The fix explicitly reads/writes UTF-8 and writes LF bundle output; the Windows build selects its native MinGW tools explicitly. Release assets are enumerated explicitly for PowerShell. Publication remains gated on the corrected Windows run.
+The first hosted Windows run (40157804260, source a602ab249e8e3ab639f9285c50f367497b6e81eb) failed before compilation because build_assets.py relied on the platform default cp1252 text encoding. This is the negative control. The fix explicitly reads/writes UTF-8 and writes LF bundle output; the Windows build selects its native MinGW tools explicitly. Release assets are enumerated explicitly for PowerShell. The corrected Windows run 40157955595 passed every step, including release publication.
+
+## Verified published release
+
+- Version/tag: v1.6.0. Exact release source: 65eca125de6fe45c0c0772c90f8e5de7c505a556.
+- Release: https://github.com/TechSavage1989/Print-Quote-Calculator/releases/tag/v1.6.0
+- Windows CI: https://github.com/TechSavage1989/Print-Quote-Calculator/actions/runs/40157955595 (success, Windows Server 2025).
+- EXE: PrintQuoteCalculator.exe, 2,360,320 bytes; SHA-256 df817ea7db6466c0f80a52760b242008a1277d55f5db7fcc4f7f50d64e104a37.
+- Portable ZIP SHA-256: 5aa23781df0c539c6d8b6a76fd4cdd87cd084b813b9db8572c57c4987f79af15.
+- All eight public release assets were downloaded, checked against GitHub asset digests and SHA256SUMS.txt, and the EXE was checked against update.json. The portable ZIP contains only the matching EXE and READ_FIRST.txt. PE x64/GUI identity strings and absence of an EXE signing certificate were checked.
+- The latest update feed returned HTTP 200 and the same manifest/digest, following only the production allowlisted GitHub and release-assets hosts. No tokens are required.
+- No published asset or tag was overwritten. This handoff update is documentation-only after the verified release commit; it does not change the release binaries.
+
+Use the GitHub release and tag as the baseline, not the older Library candidate ZIP. First install of this updater-capable version is manual; there is no release-to-release upgrade from 1.5.x because it lacked an updater. The true published 1.6.0-to-next-version upgrade remains a required qualification step for the next release.
+
+When incrementing the app version, also increment the CI payload fixture version in tests/update_fixture.rc and the expected test fixture versions in tests/update_native.cpp so the fixture remains newer than the installed/helper version. Never relax the production newer-version check to make a test pass.
