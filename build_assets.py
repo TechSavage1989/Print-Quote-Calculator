@@ -5,13 +5,13 @@ import re
 ROOT = Path(__file__).resolve().parent
 
 def bundle(desktop=False):
-    html = (ROOT / 'web/index.html').read_text()
-    license_text = (ROOT / 'web/vendor/pdf-lib.LICENSE.md').read_text()
+    html = (ROOT / 'web/index.html').read_text(encoding="utf-8")
+    license_text = (ROOT / 'web/vendor/pdf-lib.LICENSE.md').read_text(encoding="utf-8")
     html = html.replace('</head>', '<!-- Bundled pdf-lib license:\n' + license_text.replace('--', '- -') + '\n--></head>')
     for name in ['style.css', 'compact.css']:
-        html = html.replace(f'<link rel="stylesheet" href="{name}">', '<style>' + (ROOT / 'web' / name).read_text() + '</style>')
+        html = html.replace(f'<link rel="stylesheet" href="{name}">', '<style>' + (ROOT / 'web' / name).read_text(encoding="utf-8") + '</style>')
     for name in ['calculator.js', 'vendor/pdf-lib.min.js', 'export.js', 'converters.js', 'app.js']:
-        code = (ROOT / 'web' / name).read_text()
+        code = (ROOT / 'web' / name).read_text(encoding="utf-8")
         code = re.sub(r'//# sourceMappingURL=.*', '', code)
         if desktop and name == 'app.js':
             code = code.replace('exportBusy=true;', "exportBusy=true;window.desktopAPI.operation('export',true);")
@@ -43,14 +43,14 @@ def bundle(desktop=False):
         code = re.sub(r'</script', r'<\\/script', code, flags=re.I)
         html = html.replace(f'<script src="{name}"></script>', '<script>' + code + '</script>')
     if desktop:
-        bridge = (ROOT / 'bridge.js').read_text()
+        bridge = (ROOT / 'bridge.js').read_text(encoding="utf-8")
         html = html.replace('</head>', '<script>' + bridge + '</script></head>')
-        html = html.replace('</body>', '<script>' + (ROOT / 'updater_ui.js').read_text() + '</script></body>')
+        html = html.replace('</body>', '<script>' + (ROOT / 'updater_ui.js').read_text(encoding="utf-8") + '</script></body>')
     assert not re.search(r'<script[^>]+src=', html)
     assert not re.search(r'<link[^>]+stylesheet', html)
     return html
 
 if __name__ == '__main__':
-    (ROOT / 'embedded.html').write_text(bundle(True))
-    (ROOT / '3D_Print_Quote_Calculator_Offline.html').write_text(bundle(False))
+    (ROOT / 'embedded.html').write_text(bundle(True), encoding="utf-8", newline="\n")
+    (ROOT / '3D_Print_Quote_Calculator_Offline.html').write_text(bundle(False), encoding="utf-8", newline="\n")
     print('Built embedded WebView2 page and standalone HTML.')

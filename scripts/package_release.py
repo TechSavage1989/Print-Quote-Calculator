@@ -3,7 +3,7 @@ from pathlib import Path
 import hashlib, json, re, shutil, zipfile, sys
 
 ROOT = Path(__file__).resolve().parent.parent
-VERSION = re.search(r'Version="([0-9.]+)"', (ROOT / 'update_core.h').read_text()).group(1)
+VERSION = re.search(r'Version="([0-9.]+)"', (ROOT / 'update_core.h').read_text(encoding="utf-8")).group(1)
 OUT = ROOT / 'release'
 
 def main():
@@ -12,8 +12,8 @@ def main():
         raise SystemExit('Build the Windows executable first.')
     if not 1024 <= exe.stat().st_size <= 32 * 1024 * 1024:
         raise SystemExit('Executable exceeds the current updater size limit.')
-    rc = (ROOT / 'app.rc').read_text()
-    if f'FILEVERSION {VERSION.replace(".", ",")},0' not in rc or f'L"Print Quote Calculator {VERSION}"' not in (ROOT / 'main.cpp').read_text():
+    rc = (ROOT / 'app.rc').read_text(encoding="utf-8")
+    if f'FILEVERSION {VERSION.replace(".", ",")},0' not in rc or f'L"Print Quote Calculator {VERSION}"' not in (ROOT / 'main.cpp').read_text(encoding="utf-8"):
         raise SystemExit('Version mismatch between core, resource and native window.')
     OUT.mkdir(exist_ok=True)
     expected = {'PrintQuoteCalculator.exe', 'PrintQuoteCalculator.html', 'Print_Quote_Icon.svg', 'Print_Quote_Icon.ico', 'Print_Quote_Icon.png', 'update.json', 'SHA256SUMS.txt', f'PrintQuoteCalculator-{VERSION}-Windows-x64.zip'}

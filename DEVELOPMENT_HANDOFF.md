@@ -80,3 +80,7 @@ Local validation performed in this environment is recorded in LOCAL_VALIDATION.m
 - Test offline/DNS/TLS errors, HTTP 403/429 and both Retry-After formats, ETag/304, manual cooldown and focus/poll scheduling against a controlled HTTPS feed in a test-only build. Production allowlists must not be weakened.
 - Test folder permissions/locks, a different download/target volume, unhealthy WebView2 startup, interrupted helper, rollback, renamed executable, preserved window geometry and one rollback backup.
 - Keep native/hosted limitations explicit until each test has evidence.
+
+## Publication validation history
+
+The first hosted Windows run (40157804260, source a602ab249e8e3ab639f9285c50f367497b6e81eb) failed before compilation because build_assets.py relied on the platform default cp1252 text encoding. This is the negative control. The fix explicitly reads/writes UTF-8 and writes LF bundle output; the Windows build selects its native MinGW tools explicitly. Release assets are enumerated explicitly for PowerShell. Publication remains gated on the corrected Windows run.
