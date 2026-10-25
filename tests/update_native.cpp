@@ -14,7 +14,7 @@ int wmain(int argc,wchar_t**argv){
   if(argc==5&&std::wstring(argv[1])==L"--test-apply")return applyUpdate(argv[2],utf8(argv[3]),std::stoul(argv[4]));
   if(argc==5&&std::wstring(argv[1])==L"--test-parent"){
    fs::path root=argv[2];std::string id=utf8(argv[3]);fs::path fixture=argv[4],tx=root/wide(id);fs::create_directories(tx);auto target=exePath();fs::copy_file(target,tx/L"helper.exe");fs::copy_file(fixture,tx/L"payload.exe");
-   json release={{"schema",1},{"app_id",AppId},{"version","1.6.1"},{"url",std::string(Repo)+"/releases/download/v1.6.1/PrintQuoteCalculator.exe"},{"size",fs::file_size(fixture)},{"sha256",digest(fixture)}};
+   json release={{"schema",1},{"app_id",AppId},{"version","1.6.2"},{"url",std::string(Repo)+"/releases/download/v1.6.2/PrintQuoteCalculator.exe"},{"size",fs::file_size(fixture)},{"sha256",digest(fixture)}};
    writeJson(tx/L"job.json",{{"token",id},{"target",utf8(target.wstring())},{"parent",GetCurrentProcessId()},{"old_sha256",digest(target)},{"manifest",release}});
    auto event=CreateEventW(nullptr,TRUE,FALSE,(L"Local\\PrintQuoteInstallerReady-"+wide(id)).c_str());auto helper=launch(tx/L"helper.exe",{L"--test-apply",root.wstring(),wide(id),std::to_wstring(GetCurrentProcessId())});
    auto r=WaitForSingleObject(event,20000);CloseHandle(event);CloseHandle(helper.hProcess);if(r!=WAIT_OBJECT_0)return 4;return 0;
@@ -23,11 +23,11 @@ int wmain(int argc,wchar_t**argv){
   if(exePath().parent_path().filename().wstring().rfind(L"case-",0)==0)return 0;
   instance=GetModuleHandleW(nullptr);auto root=fs::temp_directory_path()/(L"PQC-native-"+wide(token()));fs::create_directories(root);
   auto input=exePath().parent_path();auto good=input/L"update_fixture.exe",bad=input/L"update_fixture_unhealthy.exe";
-  assert(peVersion(good)=="1.6.1");assert(digest(good).size()==64);
+  assert(peVersion(good)=="1.6.2");assert(digest(good).size()==64);
   {auto corrupt=root/L"invalid.exe";std::ofstream(corrupt)<<"MZnot-an-exe";bool rejected=false;try{peVersion(corrupt);}catch(...){rejected=true;}assert(rejected);}
   {
    auto fail=[](auto fn){bool rejected=false;try{fn();}catch(...){rejected=true;}assert(rejected);};
-   Manifest m{"1.6.1","",digest(good),"",fs::file_size(good),json::array()};validateExe(good,m);auto wrong=m;wrong.sha256=std::string(64,'0');fail([&]{validateExe(good,wrong);});wrong=m;wrong.version="1.6.2";fail([&]{validateExe(good,wrong);});
+   Manifest m{"1.6.2","",digest(good),"",fs::file_size(good),json::array()};validateExe(good,m);auto wrong=m;wrong.sha256=std::string(64,'0');fail([&]{validateExe(good,wrong);});wrong=m;wrong.version="1.6.3";fail([&]{validateExe(good,wrong);});
    auto bytes=textFile(good,MaxExe);auto at=bytes.find(std::string("P\0r\0i\0n\0t\0 \0Q\0u\0o\0t\0e\0 \0C\0a\0l\0c\0u\0l\0a\0t\0o\0r\0",42));assert(at!=std::string::npos);bytes[at]='X';auto different=root/L"wrong-identity.exe";std::ofstream(different,std::ios::binary).write(bytes.data(),bytes.size());fail([&]{peVersion(different);});
    auto archive=root/L"archive.exe";std::ofstream(archive,std::ios::binary)<<std::string(2048,'P');auto archiveManifest=m;archiveManifest.size=fs::file_size(archive);archiveManifest.sha256=digest(archive);fail([&]{validateExe(archive,archiveManifest);});
   }
@@ -37,7 +37,7 @@ int wmain(int argc,wchar_t**argv){
    while(GetTickCount64()<deadline){pump(100);if(fs::exists(tx/L"result.json")){result=json::parse(textFile(tx/L"result.json"));break;}}
    assert(!result.is_null());DWORD helper=result.at("helper");HANDLE finished=OpenProcess(SYNCHRONIZE,FALSE,helper);if(finished){auto end=GetTickCount64()+10000;while(WaitForSingleObject(finished,0)==WAIT_TIMEOUT&&GetTickCount64()<end){closeProcessWindows(helper);pump(100);}assert(WaitForSingleObject(finished,0)==WAIT_OBJECT_0);CloseHandle(finished);}assert(result.at("success")== (std::string(scenario)=="healthy"));
    assert(textFile(storage/L"settings-sentinel.json")=="preserve-me");assert(fs::exists(storage/L"rollback"/L"previous.exe"));assert(digest(storage/L"rollback"/L"previous.exe")==before);
-   if(std::string(scenario)=="healthy")assert(peVersion(target)=="1.6.1");else assert(digest(target)==before);
+   if(std::string(scenario)=="healthy")assert(peVersion(target)=="1.6.2");else assert(digest(target)==before);
    EnumWindows([](HWND h,LPARAM p)->BOOL{DWORD pid;GetWindowThreadProcessId(h,&pid);HANDLE ph=OpenProcess(PROCESS_QUERY_LIMITED_INFORMATION,FALSE,pid);if(ph){try{if(samePath(processImage(ph),*(fs::path*)p))PostMessageW(h,WM_CLOSE,0,0);}catch(...){}CloseHandle(ph);}return TRUE;},(LPARAM)&target);pump(1000);CloseHandle(parent.hProcess);
    Manager cleanup(nullptr,storage,[](const json&){});cleanup.cleanup();assert(!fs::exists(tx));assert(!fs::exists(area/(L".PrintQuoteCalculator-"+wide(id)+L".stage")));
    std::cout<<"PASS native install/rollback, custom launch filename, cross-directory staging, one backup, sentinel preservation and cleanup: "<<scenario<<std::endl;

@@ -59,7 +59,7 @@ public:
  void cancel(){canceled=true;std::lock_guard<std::mutex>g(lock);if(active){WinHttpCloseHandle(active);active=nullptr;}}
  HttpResult get(std::string url,const std::string&etag,const fs::path&output,uint64_t limit,std::function<void(int)>progress={}){
   struct Internet{HINTERNET h=nullptr;~Internet(){if(h)WinHttpCloseHandle(h);}}session,connection;
-  session.h=WinHttpOpen(L"PrintQuoteCalculator/1.6.0",WINHTTP_ACCESS_TYPE_AUTOMATIC_PROXY,WINHTTP_NO_PROXY_NAME,WINHTTP_NO_PROXY_BYPASS,0);if(!session.h)throw std::runtime_error("Update check could not start.");WinHttpSetTimeouts(session.h,4000,4000,4000,4000);
+  session.h=WinHttpOpen(L"PrintQuoteCalculator/1.6.1",WINHTTP_ACCESS_TYPE_AUTOMATIC_PROXY,WINHTTP_NO_PROXY_NAME,WINHTTP_NO_PROXY_BYPASS,0);if(!session.h)throw std::runtime_error("Update check could not start.");WinHttpSetTimeouts(session.h,4000,4000,4000,4000);
   const auto deadline=GetTickCount64()+(output.empty()?25000:180000);
   for(int redirects=0;redirects<5;redirects++){
    if(canceled)throw std::runtime_error("Update operation canceled.");

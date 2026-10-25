@@ -310,7 +310,7 @@ int WINAPI wWinMain(HINSTANCE inst,HINSTANCE,PWSTR,int){
  configFolder=(fs::path(folder(CSIDL_APPDATA))/L"PrintQuoteCalculatorWebView2").wstring();
  cacheFolder=(fs::path(folder(CSIDL_LOCAL_APPDATA))/L"PrintQuoteCalculatorWebView2").wstring();loadWindow();
  WNDCLASSEXW wc={sizeof(wc)};wc.hInstance=inst;wc.hIcon=LoadIconW(inst,MAKEINTRESOURCEW(101));wc.hIconSm=(HICON)LoadImageW(inst,MAKEINTRESOURCEW(101),IMAGE_ICON,16,16,LR_DEFAULTCOLOR);wc.hCursor=LoadCursorW(nullptr,IDC_ARROW);wc.lpszClassName=L"PrintQuoteWebView2";wc.lpfnWndProc=WindowProc;RegisterClassExW(&wc);
- mainWindow=CreateWindowExW(0,wc.lpszClassName,L"Print Quote Calculator 1.6.0",WS_OVERLAPPEDWINDOW|WS_CLIPCHILDREN,CW_USEDEFAULT,CW_USEDEFAULT,1280,800,nullptr,nullptr,inst,nullptr);
+ mainWindow=CreateWindowExW(0,wc.lpszClassName,L"Print Quote Calculator 1.6.1",WS_OVERLAPPEDWINDOW|WS_CLIPCHILDREN,CW_USEDEFAULT,CW_USEDEFAULT,1280,800,nullptr,nullptr,inst,nullptr);
  if(!mainWindow){CoUninitialize();if(mutex)CloseHandle(mutex);return 1;}
  restorePlacement(mainWindow);started=true;UpdateWindow(mainWindow);
  try{updater=std::make_unique<updates::Manager>(mainWindow,fs::path(cacheFolder)/L"Updates",[](const json&state){reply({{"type","update-state"},{"state",state}});});

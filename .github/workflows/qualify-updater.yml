@@ -1,0 +1,23 @@
+name: Qualify published updater
+on:
+  workflow_run:
+    workflows: ['Windows portable build and tests']
+    types: [completed]
+  push:
+    branches: [main]
+    paths: ['tests/qualify_release.ps1', '.github/workflows/qualify-updater.yml']
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  real-upgrade:
+    if: (github.event_name == 'workflow_run' && github.event.workflow_run.conclusion == 'success' && github.event.workflow_run.head_branch == 'main' && contains(github.event.workflow_run.head_commit.message, '[release]')) || (github.event_name == 'push' && contains(github.event.head_commit.message, '[qualify]')) || github.event_name == 'workflow_dispatch'
+    runs-on: windows-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - name: Test actual published 1.6.0 to latest upgrade through the app UI
+        shell: powershell
+        run: |
+          $version = (Get-Content package.json -Raw | ConvertFrom-Json).version
+          & tests/qualify_release.ps1 -ExpectedVersion $version

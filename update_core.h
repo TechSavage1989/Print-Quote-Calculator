@@ -9,7 +9,7 @@
 namespace updates {
 using json=nlohmann::json;
 inline constexpr const char* AppId="PrintQuoteCalculator.WebView2";
-inline constexpr const char* Version="1.6.0";
+inline constexpr const char* Version="1.6.1";
 inline constexpr const char* Repo="https://github.com/TechSavage1989/Print-Quote-Calculator";
 inline constexpr const char* Feed="https://github.com/TechSavage1989/Print-Quote-Calculator/releases/latest/download/update.json";
 inline constexpr uint64_t MaxExe=32*1024*1024;

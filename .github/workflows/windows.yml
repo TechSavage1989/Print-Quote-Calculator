@@ -2,6 +2,7 @@ name: Windows portable build and tests
 on:
   push:
     branches: [main]
+    paths-ignore: ['tests/qualify_release.ps1', '.github/workflows/qualify-updater.yml']
     tags: ['v*']
   pull_request:
   workflow_dispatch:

@@ -99,3 +99,7 @@ The first hosted Windows run (40157804260, source a602ab249e8e3ab639f9285c50f367
 Use the GitHub release and tag as the baseline, not the older Library candidate ZIP. First install of this updater-capable version is manual; there is no release-to-release upgrade from 1.5.x because it lacked an updater. The true published 1.6.0-to-next-version upgrade remains a required qualification step for the next release.
 
 When incrementing the app version, also increment the CI payload fixture version in tests/update_fixture.rc and the expected test fixture versions in tests/update_native.cpp so the fixture remains newer than the installed/helper version. Never relax the production newer-version check to make a test pass.
+
+## Version 1.6.1 update test in progress
+
+The user requested a small app change and publication to test the updater. Version 1.6.1 adds an About section in Settings, leaving calculator web assets and pricing unchanged. All version/resource fields are incremented; native fixture payloads are 1.6.2. The release is gated on the existing Windows checks. A separate post-publication workflow will exercise actual 1.6.0-to-1.6.1 app-button download/install/restart, visible new UI, project/theme/window preservation, one backup and helper cleanup. Record its actual result after publication. Existing v1.6.0 remains unchanged.

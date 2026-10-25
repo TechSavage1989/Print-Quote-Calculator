@@ -1,6 +1,6 @@
 {
   "name": "print-quote-calculator",
-  "version": "1.6.0",
+  "version": "1.6.1",
   "private": true,
   "description": "Offline WebView2 calculator integration tests",
   "scripts": {

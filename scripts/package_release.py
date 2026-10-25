@@ -23,10 +23,9 @@ def main():
     shutil.copy2(ROOT / '3D_Print_Quote_Calculator_Offline.html', OUT / 'PrintQuoteCalculator.html')
     for name in ['Print_Quote_Icon.svg', 'Print_Quote_Icon.ico', 'Print_Quote_Icon.png']:
         shutil.copy2(ROOT / name, OUT / name)
-    notes = ['Background startup, five-minute and focus-return update checks.',
-             'Explicit verified download and install/restart actions with rollback.',
-             'Preserves Resin, FDM, UV, logo/PDF, converters and saved window placement.',
-             'Stable portable executable filename and per-user update staging.']
+    notes = ['Added an About section in Settings with the installed app version.',
+             'Shows Resin, FDM and UV support without changing the main workspace.',
+             'This small update can be installed from version 1.6.0 using the built-in updater.']
     manifest = {'schema': 1, 'app_id': 'PrintQuoteCalculator.WebView2', 'version': VERSION,
                 'url': f'https://github.com/TechSavage1989/Print-Quote-Calculator/releases/download/v{VERSION}/PrintQuoteCalculator.exe',
                 'size': exe.stat().st_size, 'sha256': hashlib.sha256(exe.read_bytes()).hexdigest(),
