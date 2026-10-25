@@ -6,8 +6,8 @@
 - Repository: https://github.com/TechSavage1989/Print-Quote-Calculator, confirmed public.
 - Repository inspected at main cdd2d4b455b94eb773514d4a311600db20982a49: README only; no source, handoff, releases or CI history.
 - Latest earlier delivered baseline: 1.5.1, sourced from this conversation's editable WebView2 tree. Windows execution was not confirmed.
-- Current released baseline: v1.6.0, exact source/tag commit 65eca125de6fe45c0c0772c90f8e5de7c505a556. The user explicitly authorized public source, Windows CI and release publication by replying "publish". Windows CI run 40157955595 passed and published the release. The Windows-built artifact supersedes the earlier cross-compiled local candidate.
-- Intended single-repository update feed: https://github.com/TechSavage1989/Print-Quote-Calculator/releases/latest/download/update.json . It is published and was fetched successfully over HTTPS, serving the v1.6.0 manifest with the verified EXE digest. No authenticated updater or separate public binary repository is configured. If the owner chooses private source instead, resolve update authentication/feed architecture explicitly before publishing anything.
+- Current released baseline: v1.6.1, exact source/tag commit 1e84f4dda2049942a7961b34d36b9bf778954c15. Windows CI run 40159326458 passed and published the release. Actual published 1.6.0-to-1.6.1 UI upgrade qualification run 40160208389 passed. Public source/release publication remains authorized. The official Windows CI artifact supersedes the earlier local candidates.
+- Intended single-repository update feed: https://github.com/TechSavage1989/Print-Quote-Calculator/releases/latest/download/update.json . It is published and was fetched successfully over HTTPS, serving the v1.6.1 manifest with the verified EXE digest. No authenticated updater or separate public binary repository is configured. If the owner chooses private source instead, resolve update authentication/feed architecture explicitly before publishing anything.
 
 ## Approved scope
 
@@ -16,7 +16,7 @@ Preserve Resin/FDM/UV quoting, ink subscription and bundle presets, per-channel 
 ## Code map
 
 - main.cpp: native host, HWND timers, window/focus handling, restricted WebView2 bridge, file export, startup, health checks.
-- update_core.h: version 1.6.0, app ID, HTTPS feed, manifest/asset validation and timing/backoff policy.
+- update_core.h: version 1.6.1, app ID, HTTPS feed, manifest/asset validation and timing/backoff policy.
 - update_windows.h: WinHTTP worker, conditional requests, bounded downloads, SHA-256 and PE validation, helper install/rollback and cleanup.
 - bridge.js / updater_ui.js: desktop-only update messages/UI and active-operation guards.
 - web/: unchanged calculator design and features. build_assets.py creates embedded.html and standalone HTML. Desktop bridge/UI are injected only into embedded.html.
@@ -51,9 +51,9 @@ App-owned result transactions are cleaned only after a healthy app window and he
 2. Keep version consistent in update_core.h, main.cpp window title, app.rc numeric/string versions, package.json/lockfile and release notes. Never reuse a published version or overwrite a release asset.
 3. First authorized source sync must include source, vendored licenses/SDK, tests, icons, scripts, AGENTS.md, handoff and workflow. Exclude generated EXEs, objects, QA PDFs, local profiles, node_modules and release staging from Git source. Release assets contain the build output.
 4. Run tests on the exact source. Public publication is authorized in this conversation. Let the main-branch Windows workflow run and inspect its exact commit and all results before tagging.
-5. If tests pass and release publication is authorized, use a main-branch commit marked [release]. After the checks pass, the workflow creates tag/release v1.6.0 against that exact commit, only if the release does not exist. Direct version tags and explicit workflow-dispatch publication are also supported. It uses GitHub's scoped ephemeral workflow token, not an embedded app credential.
+5. If tests pass and release publication is authorized, use a main-branch commit marked [release]. After the checks pass, the workflow creates the versioned tag/release against that exact commit, only if the release does not exist. Direct version tags and explicit workflow-dispatch publication are also supported. It uses GitHub's scoped ephemeral workflow token, not an embedded app credential.
 6. Verify tag commit, release assets and every hosted hash after publication. Do not call the candidate ready based only on a workflow file or local EXE.
-7. First manual installation bootstraps the updater; 1.5.x has no updater. Qualify the real 1.6.0-to-next-published-version path separately with the Windows checklist. Fixture-based installs are not a substitute for a published release upgrade.
+7. First manual installation bootstraps the updater; 1.5.x has no updater. The actual 1.6.0-to-1.6.1 published-release upgrade is now qualified. Repeat qualification for each new release; fixture installs alone are not a substitute.
 
 ## Commands and validation
 
@@ -69,7 +69,7 @@ python3 scripts/verify_artifacts.py
 
 The Windows workflow builds fixture EXEs and tests/update_native.exe. The native suite includes a missing-HWND timer negative control, real timers/elapsed time, startup single flight, focus return after two minutes, five-minute polling, actual HTTPS checks, x64 PE identity, helper replacement, unhealthy-child rollback, custom launch filename, one backup, preserved settings sentinel and deferred cleanup. It takes about nine minutes. The separate Windows smoke script starts the actual WebView2 calculator and requires visible-window/render/JS health confirmation. Test fixtures and QA executables never enter release packages.
 
-Local validation performed in this environment is recorded in LOCAL_VALIDATION.md. The earlier local candidate was cross-compiled. The released EXE was subsequently built and tested on hosted Windows Server 2025. Native install/rollback fixtures, real timer/focus checks, actual HTTPS error handling, and the actual WebView2 app startup/render/JS health check all passed. Real cross-volume replacement, controlled shared-IP throttling/TLS/ETag transport scenarios, manual Windows 10/11 UI/native file-dialog/printer checks, and a genuine previous-release-to-next-release upgrade remain unverified. Do not report these as passed.
+Local validation performed in this environment is recorded in LOCAL_VALIDATION.md. The earlier local candidate was cross-compiled. The released EXE was subsequently built and tested on hosted Windows Server 2025. Native install/rollback fixtures, real timer/focus checks, actual HTTPS error handling, and the actual WebView2 app startup/render/JS health check all passed. Actual released 1.6.0-to-1.6.1 download/install/restart through the app UI, project/theme/window preservation, C:-to-D: staging, one backup and helper cleanup subsequently passed. Controlled shared-IP throttling/TLS/ETag scenarios and manual Windows 10/11 UI/native file-dialog/printer checks remain unverified. Do not report these as passed.
 
 ## Windows acceptance checklist before claiming readiness
 
@@ -85,7 +85,7 @@ Local validation performed in this environment is recorded in LOCAL_VALIDATION.m
 
 The first hosted Windows run (40157804260, source a602ab249e8e3ab639f9285c50f367497b6e81eb) failed before compilation because build_assets.py relied on the platform default cp1252 text encoding. This is the negative control. The fix explicitly reads/writes UTF-8 and writes LF bundle output; the Windows build selects its native MinGW tools explicitly. Release assets are enumerated explicitly for PowerShell. The corrected Windows run 40157955595 passed every step, including release publication.
 
-## Verified published release
+## Historical verified release v1.6.0
 
 - Version/tag: v1.6.0. Exact release source: 65eca125de6fe45c0c0772c90f8e5de7c505a556.
 - Release: https://github.com/TechSavage1989/Print-Quote-Calculator/releases/tag/v1.6.0
@@ -96,10 +96,24 @@ The first hosted Windows run (40157804260, source a602ab249e8e3ab639f9285c50f367
 - The latest update feed returned HTTP 200 and the same manifest/digest, following only the production allowlisted GitHub and release-assets hosts. No tokens are required.
 - No published asset or tag was overwritten. This handoff update is documentation-only after the verified release commit; it does not change the release binaries.
 
-Use the GitHub release and tag as the baseline, not the older Library candidate ZIP. First install of this updater-capable version is manual; there is no release-to-release upgrade from 1.5.x because it lacked an updater. The true published 1.6.0-to-next-version upgrade remains a required qualification step for the next release.
+Use the GitHub release and tag as the baseline, not the older Library candidate ZIP. First install of this updater-capable version is manual; there is no release-to-release upgrade from 1.5.x because it lacked an updater. The subsequent actual published 1.6.0-to-1.6.1 upgrade passed; see the current release record below.
 
 When incrementing the app version, also increment the CI payload fixture version in tests/update_fixture.rc and the expected test fixture versions in tests/update_native.cpp so the fixture remains newer than the installed/helper version. Never relax the production newer-version check to make a test pass.
 
-## Version 1.6.1 update test in progress
+## Current verified release v1.6.1
 
-The user requested a small app change and publication to test the updater. Version 1.6.1 adds an About section in Settings, leaving calculator web assets and pricing unchanged. All version/resource fields are incremented; native fixture payloads are 1.6.2. The release is gated on the existing Windows checks. A separate post-publication workflow will exercise actual 1.6.0-to-1.6.1 app-button download/install/restart, visible new UI, project/theme/window preservation, one backup and helper cleanup. Record its actual result after publication. Existing v1.6.0 remains unchanged.
+- Small app change: Settings now contains About Print Quote Calculator, the installed version and supported print types. Calculator web assets and pricing logic are unchanged.
+- Source/tag: 1e84f4dda2049942a7961b34d36b9bf778954c15.
+- Release: https://github.com/TechSavage1989/Print-Quote-Calculator/releases/tag/v1.6.1
+- Build/Windows CI: https://github.com/TechSavage1989/Print-Quote-Calculator/actions/runs/40159326458 (success).
+- Real published updater qualification: https://github.com/TechSavage1989/Print-Quote-Calculator/actions/runs/40160208389 (success, Windows Server 2025).
+- Qualification tooling commit: 95525e1c825a7331429ea3bd2d552e1dea972895. Two earlier harness attempts failed on accessibility pattern activation; the app binaries were not changed or republished. The successful harness waits for the actual native health/cleanup and uses keyboard activation for popup buttons.
+- EXE: 2,360,320 bytes, SHA-256 0c1a6055344d7dd68994f2f0a79272a3f7c8cbafefd423ca56ccb313c428771e.
+- Portable ZIP SHA-256: 9370d99617873c1410c6eaaa3fbf95a49c384074d84d6d506725d1421a14786a.
+- All eight public assets were downloaded and matched GitHub asset digests; the seven listed files matched SHA256SUMS.txt. The EXE matched update.json and the portable ZIP. Tag and release target match the exact successful build commit.
+- Actual old released 1.6.0 was downloaded and checked against its pinned digest. Windows UI automation entered a project name, changed theme, clicked the old app's Download and Install and restart buttons, waited for a different visible app process and native health, checked the new hash/version and About UI, and confirmed project/theme/window preservation, a stable filename, one exact rollback backup, helper exit and transaction cleanup.
+- Target application drive was D: and per-user updater staging/backup drive was C:, exercising the cross-drive installation path.
+- The latest public feed serves 1.6.1. Existing 1.6.0 users can test using Settings, Check for updates, Download, Install and restart. No manual EXE replacement is needed for that test. Older 1.5.x installations still need a manual bootstrap.
+- Remaining qualification: controlled throttling/Retry-After/TLS/ETag transport scenarios, manual Windows 10/11 native file-dialog/printer/display combinations, additional filesystems and interrupted-install recovery. Hashes are not publisher signing; release EXEs remain unsigned.
+
+For the next release, increment native fixture versions above the app version. Also update the real-upgrade harness's pinned previous-release URL/hash (currently 1.6.0) and descriptive workflow label to the intended previous release. Do not weaken validation or overwrite old releases. The post-publication qualification workflow can be rerun after test-only fixes with a [qualify] commit; the main build ignores those test-only paths. Current documentation-only changes do not alter the released app bytes.

@@ -5,7 +5,7 @@ Read DEVELOPMENT_HANDOFF.md next. Preserve the WebView2 interface, calculator ma
 Repository: https://github.com/TechSavage1989/Print-Quote-Calculator (public).
 The initial inspection found only a README at cdd2d4b455b94eb773514d4a311600db20982a49; no releases or CI runs. The user explicitly authorized public source publication, Windows CI and release publication by replying "publish" to the concrete proposal in this chat. Continue that authorized publication without asking again. Do not change repository access or create/embed credentials.
 
-Current released baseline is v1.6.0, source 65eca125de6fe45c0c0772c90f8e5de7c505a556, verified by Windows CI run 40157955595. Read the handoff for exact artifacts and remaining qualification limits. The stable launch filename is PrintQuoteCalculator.exe. The earlier 1.5.1 local candidate is superseded. No released 1.5.x executable contains an updater; first install of 1.6.0 is manual.
+Current released baseline is v1.6.1, source 1e84f4dda2049942a7961b34d36b9bf778954c15, verified by Windows CI run 40159326458. The actual published 1.6.0-to-1.6.1 in-app upgrade passed qualification run 40160208389, including project/theme/window preservation, C:-to-D: staging, one backup and cleanup. Read the handoff for exact artifacts and remaining limits. Stable launch filename: PrintQuoteCalculator.exe. Older Library candidate ZIPs are superseded. Install manually when coming from 1.5.x; 1.6.0 can update to 1.6.1 in the app.
 
 Use native HWND timers and WinHTTP workers for update scheduling/networking. Never add browser polling, auto-download, auto-install, or silent restart. Preserve the exact current executable path for later updates, including custom filenames; do not rewrite user shortcuts.
 

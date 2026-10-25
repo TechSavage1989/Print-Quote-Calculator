@@ -1,6 +1,6 @@
-Version 1.6.0 is published after passing hosted Windows CI. Read README.md and DEVELOPMENT_HANDOFF.md for updater behavior and release status.
+Version 1.6.1 is published after passing hosted Windows CI. Read README.md and DEVELOPMENT_HANDOFF.md for updater behavior and release status.
 
-3D Print Quote Calculator 1.6.0 - WebView2 Edition
+3D Print Quote Calculator 1.6.1 - WebView2 Edition
 
 RUN
 Open PrintQuoteCalculator.exe on Windows 10 or Windows 11 x64. It is a single portable application executable. The computer must have Microsoft Edge WebView2 Runtime installed. If the runtime is missing, the app offers Microsoft's official download page. Choose Evergreen Runtime, install it, and reopen the app.
@@ -68,7 +68,7 @@ Run test_uv.cjs with the same test environment for UV total/per-channel ink cost
 
 check_placement.cpp is a portable test of placement persistence and monitor recovery. Build with a standard C++17 compiler and -Ivendor.
 
-The released executable was built in Windows CI. Native install/rollback, real timers/focus, and actual WebView2 startup/render/JS health checks passed. Manual Windows 10/11 file dialogs, printers, display configurations, cross-volume installs and a genuine release-to-release upgrade remain unverified. See DEVELOPMENT_HANDOFF.md for the exact release commit and CI evidence.
+The released executable was built in Windows CI. Native install/rollback, real timers/focus, and actual WebView2 startup/render/JS health checks passed. Manual Windows 10/11 file dialogs, printers, display configurations, controlled throttling/TLS/ETag scenarios remain unverified. The actual published 1.6.0-to-1.6.1 in-app upgrade, C:-to-D: staging, project/theme/window preservation and cleanup passed Windows qualification. See DEVELOPMENT_HANDOFF.md for the exact release commit and CI evidence.
 
 NOTICES
 The original Microsoft WebView2 SDK header and signed x64 loader are from Microsoft.Web.WebView2 1.0.3537.50. License and notices are retained in sdk/. uuid_mingw.h and EventToken.h supply MinGW compatibility declarations without modifying the official header or loader. nlohmann/json and pdf-lib license notices are retained under vendor/ and web/vendor/. MinGW/GCC runtime support libraries use the GCC Runtime Library Exception. Application code and icon source are included for editing.

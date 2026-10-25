@@ -1,3 +1,5 @@
+Current official release is v1.6.1. Windows build CI 40159326458 and real published 1.6.0-to-1.6.1 upgrade qualification 40160208389 passed. See DEVELOPMENT_HANDOFF.md; the local candidate data below is historical.
+
 # Local validation for 1.6.0 candidate
 
 This document records the historical cross-compiled local candidate. It is superseded by the Windows CI release at https://github.com/TechSavage1989/Print-Quote-Calculator/releases/tag/v1.6.0, source 65eca125de6fe45c0c0772c90f8e5de7c505a556. See DEVELOPMENT_HANDOFF.md for the later successful hosted Windows tests and verified release bytes. The candidate digest below is not the official release EXE digest.

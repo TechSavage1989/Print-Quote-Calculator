@@ -6,7 +6,7 @@ Read AGENTS.md and DEVELOPMENT_HANDOFF.md before continuing development.
 
 ## Current status
 
-Version 1.6.0 is published at [the GitHub release](https://github.com/TechSavage1989/Print-Quote-Calculator/releases/tag/v1.6.0). [Windows CI](https://github.com/TechSavage1989/Print-Quote-Calculator/actions/runs/40157955595) passed native install/rollback, real timer/focus tests and actual WebView2 startup/render health checks. Public release downloads and hashes were verified. See DEVELOPMENT_HANDOFF.md for the exact source commit and remaining manual/release-to-release qualification.
+Version 1.6.1 is published at [the GitHub release](https://github.com/TechSavage1989/Print-Quote-Calculator/releases/tag/v1.6.1). [Windows CI](https://github.com/TechSavage1989/Print-Quote-Calculator/actions/runs/40159326458) passed. [The actual published 1.6.0-to-1.6.1 updater test](https://github.com/TechSavage1989/Print-Quote-Calculator/actions/runs/40160208389) also passed, including the app's Download/Install buttons, restart, project/theme/window preservation and cleanup. All public download hashes were verified. See DEVELOPMENT_HANDOFF.md for exact source and remaining limits.
 
 ## Run and upgrade
 
