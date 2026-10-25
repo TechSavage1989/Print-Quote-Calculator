@@ -46,14 +46,13 @@ function WaitControl($process, [string]$type, [string]$pattern, [int]$seconds=60
 function InvokeControl($element) {
     $pattern = $null
     if ($element.TryGetCurrentPattern([System.Windows.Automation.InvokePattern]::Pattern,[ref]$pattern)) { $pattern.Invoke(); return }
-    if ($element.TryGetCurrentPattern([System.Windows.Automation.LegacyIAccessiblePattern]::Pattern,[ref]$pattern)) { $pattern.DoDefaultAction(); return }
     $element.SetFocus()
+    Start-Sleep -Milliseconds 100
     [System.Windows.Forms.SendKeys]::SendWait('{ENTER}')
 }
 function ReadValue($element) {
     $pattern = $null
     if ($element.TryGetCurrentPattern([System.Windows.Automation.ValuePattern]::Pattern,[ref]$pattern)) { return $pattern.Current.Value }
-    if ($element.TryGetCurrentPattern([System.Windows.Automation.LegacyIAccessiblePattern]::Pattern,[ref]$pattern)) { return $pattern.Current.Value }
     if ($element.TryGetCurrentPattern([System.Windows.Automation.TextPattern]::Pattern,[ref]$pattern)) { return $pattern.DocumentRange.GetText(-1).TrimEnd([char[]]"`r`n") }
     throw ('Edit has no readable accessibility pattern: ' + $element.Current.Name)
 }
@@ -115,6 +114,8 @@ try {
     if ((WaitControl $new 'Button' '(Switch to (dark|light) mode|^(Dark|Light) mode$)').Current.Name -ne $beforeTheme) { throw 'Theme was not preserved.' }
     $bounds = (RootElement $new).Current.BoundingRectangle
     if ([Math]::Abs($bounds.X-$beforeBounds.X) -gt 8 -or [Math]::Abs($bounds.Y-$beforeBounds.Y) -gt 8 -or [Math]::Abs($bounds.Width-$beforeBounds.Width) -gt 8 -or [Math]::Abs($bounds.Height-$beforeBounds.Height) -gt 8) { throw 'Native window placement changed unexpectedly.' }
+    Write-Output 'Published digest/version, project input, theme and native window bounds are preserved.'
+    $null = [PQCQualificationWindow]::SetForegroundWindow($new.MainWindowHandle)
     InvokeControl (WaitControl $new 'Button' '^Settings$')
     $until = [DateTime]::UtcNow.AddSeconds(20)
     $about = $false
