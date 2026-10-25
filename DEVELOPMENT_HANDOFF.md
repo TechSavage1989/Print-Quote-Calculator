@@ -117,3 +117,8 @@ When incrementing the app version, also increment the CI payload fixture version
 - Remaining qualification: controlled throttling/Retry-After/TLS/ETag transport scenarios, manual Windows 10/11 native file-dialog/printer/display combinations, additional filesystems and interrupted-install recovery. Hashes are not publisher signing; release EXEs remain unsigned.
 
 For the next release, increment native fixture versions above the app version. Also update the real-upgrade harness's pinned previous-release URL/hash (currently 1.6.0) and descriptive workflow label to the intended previous release. Do not weaken validation or overwrite old releases. The post-publication qualification workflow can be rerun after test-only fixes with a [qualify] commit; the main build ignores those test-only paths. Current documentation-only changes do not alter the released app bytes.
+
+
+## README refresh (2026-10-25)
+
+Documentation-only update: reorganized the root README around the existing app icon, release downloads, numbered first-run steps, features, settings and update guidance. Claims were checked against current source, workflows and release metadata. Application source, versions, tags, release assets and repository access are unchanged. This documentation pass did not rerun physical printing or manual Windows PC tests; existing qualification limits above still apply.
