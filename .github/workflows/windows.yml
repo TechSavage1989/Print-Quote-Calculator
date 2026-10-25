@@ -1,0 +1,81 @@
+name: Windows portable build and tests
+on:
+  push:
+    branches: [main]
+    tags: ['v*']
+  pull_request:
+  workflow_dispatch:
+    inputs:
+      publish:
+        description: Publish a new release after checks pass
+        type: boolean
+        default: false
+permissions:
+  contents: read
+jobs:
+  windows:
+    runs-on: windows-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+      - uses: msys2/setup-msys2@v2
+        with:
+          msystem: UCRT64
+          update: true
+          install: mingw-w64-ucrt-x86_64-gcc mingw-w64-ucrt-x86_64-python
+      - name: Build the actual application and native tests
+        shell: msys2 {0}
+        run: |
+          bash build.sh
+          g++ -std=c++17 -O2 -Ivendor tests/update_core.cpp -o tests/update_core.exe
+          tests/update_core.exe
+          windres tests/update_fixture.rc -O coff -o tests/update_fixture.o
+          g++ -std=c++17 -Os -static -municode -mwindows tests/update_fixture.cpp tests/update_fixture.o -o tests/update_fixture.exe
+          g++ -std=c++17 -Os -static -municode -mwindows -DFAIL_HEALTH tests/update_fixture.cpp tests/update_fixture.o -o tests/update_fixture_unhealthy.exe
+          g++ -std=c++17 -O1 -static -municode -Ivendor tests/update_native.cpp app.o -o tests/update_native.exe -lcomdlg32 -lole32 -lshell32 -lshlwapi -ldwmapi -lcrypt32 -luuid -lwinhttp -lbcrypt -lversion -lgdi32
+      - name: JavaScript integration checks
+        shell: pwsh
+        run: |
+          npm ci
+          node test_webview.cjs
+          node test_uv.cjs
+          node tests/update_ui.cjs
+      - name: Actual Windows install, rollback, timer and focus checks
+        shell: pwsh
+        run: |
+          & tests/update_native.exe
+          if ($LASTEXITCODE -ne 0) { throw 'Native update tests failed.' }
+      - name: Actual WebView2 calculator startup and responsiveness
+        shell: pwsh
+        run: scripts/windows_app_smoke.ps1
+      - name: Package and verify release artifacts
+        shell: msys2 {0}
+        run: |
+          python scripts/package_release.py
+          python scripts/verify_artifacts.py
+      - uses: actions/upload-artifact@v4
+        with:
+          name: PrintQuoteCalculator-Windows-x64
+          path: release/*
+          if-no-files-found: error
+      - name: Publish a new immutable version number after passing tests
+        if: startsWith(github.ref, 'refs/tags/v') || (github.ref == 'refs/heads/main' && contains(github.event.head_commit.message, '[release]')) || (github.event_name == 'workflow_dispatch' && inputs.publish)
+        shell: pwsh
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          $manifest = Get-Content release/update.json | ConvertFrom-Json
+          $tag = "v$($manifest.version)"
+          if ($env:GITHUB_REF_TYPE -eq 'tag' -and $env:GITHUB_REF_NAME -ne $tag) { throw 'Tag and executable version disagree.' }
+          gh release view $tag *> $null
+          if ($LASTEXITCODE -eq 0) { throw 'Release already exists; never overwrite published assets.' }
+          $notes = Join-Path $env:RUNNER_TEMP 'release-notes.md'
+          Get-Content RELEASE_NOTES.md -Raw | Set-Content $notes
+          Add-Content $notes "`nSource commit: $env:GITHUB_SHA`nWindows CI: https://github.com/$env:GITHUB_REPOSITORY/actions/runs/$env:GITHUB_RUN_ID"
+          gh release create $tag release/* --target $env:GITHUB_SHA --title "Print Quote Calculator $($manifest.version)" --notes-file $notes
+          if ($LASTEXITCODE -ne 0) { throw 'Release publication failed.' }
+    permissions:
+      contents: write

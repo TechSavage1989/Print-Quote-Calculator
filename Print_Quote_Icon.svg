@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="512" height="512" viewBox="0 0 512 512">
+  <title>Print Quote Calculator - flat icon</title>
+  <desc>Editable minimalist icon with solid indigo, mint and gold colors. No gradients, shadows, lighting or surface detail.</desc>
+  <g id="background"><rect x="24" y="24" width="464" height="464" rx="104" fill="#5464d9"/></g>
+  <g id="print-cube">
+    <path d="M140 184 244 124 348 184 348 304 244 364 140 304Z" fill="#80e0d0"/>
+    <path d="M140 184 244 244 348 184M244 244V364" fill="none" stroke="#5464d9" stroke-width="12" stroke-linejoin="round"/>
+  </g>
+  <g id="quote-badge">
+    <circle cx="366" cy="368" r="66" fill="#ffcf69"/>
+    <path d="M386 342C378 333 354 333 348 345C338 365 389 358 385 380C381 396 356 399 344 389M366 327V407" fill="none" stroke="#28335c" stroke-width="12" stroke-linecap="round"/>
+  </g>
+</svg>

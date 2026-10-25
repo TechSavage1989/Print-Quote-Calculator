@@ -1,0 +1,10 @@
+{
+  "name": "print-quote-calculator",
+  "version": "1.6.0",
+  "private": true,
+  "description": "Offline WebView2 calculator integration tests",
+  "scripts": {
+    "test": "node test_webview.cjs && node test_uv.cjs && node tests/update_ui.cjs"
+  },
+  "devDependencies": { "jsdom": "26.1.0" }
+}

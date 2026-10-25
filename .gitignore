@@ -1,0 +1,10 @@
+*.o
+*.exe
+embedded.html
+3D_Print_Quote_Calculator_Offline.html
+release/
+node_modules/
+UV_*Check.pdf
+*.log
+sdk-check*
+__pycache__/
