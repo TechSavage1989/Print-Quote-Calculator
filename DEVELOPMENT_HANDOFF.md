@@ -15,12 +15,12 @@ Preserve Resin/FDM/UV quoting, ink subscription and bundle presets, per-channel 
 
 ## Code map
 
-- main.cpp: native host, HWND timers, window/focus handling, restricted WebView2 bridge, file export, startup, health checks.
-- update_core.h: version 1.6.1, app ID, HTTPS feed, manifest/asset validation and timing/backoff policy.
-- update_windows.h: WinHTTP worker, conditional requests, bounded downloads, SHA-256 and PE validation, helper install/rollback and cleanup.
-- bridge.js / updater_ui.js: desktop-only update messages/UI and active-operation guards.
-- web/: unchanged calculator design and features. build_assets.py creates embedded.html and standalone HTML. Desktop bridge/UI are injected only into embedded.html.
-- app.rc: icon, manifest and numeric/string executable identity at link time. No post-build executable patching.
+- src/main.cpp: native host, HWND timers, window/focus handling, restricted WebView2 bridge, file export, startup, health checks.
+- src/update_core.h: version 1.6.1, app ID, HTTPS feed, manifest/asset validation and timing/backoff policy.
+- src/update_windows.h: WinHTTP worker, conditional requests, bounded downloads, SHA-256 and PE validation, helper install/rollback and cleanup.
+- src/bridge.js / src/updater_ui.js: desktop-only update messages/UI and active-operation guards.
+- web/: unchanged calculator design and features. scripts/build_assets.py creates embedded.html and standalone HTML. Desktop bridge/UI are injected only into embedded.html.
+- assets/app.rc: icon, manifest and numeric/string executable identity at link time. No post-build executable patching.
 - scripts/package_release.py / verify_artifacts.py: allowlisted portable/release output, update.json and SHA256SUMS.txt.
 
 ## Startup, polling and errors
@@ -48,7 +48,7 @@ App-owned result transactions are cleaned only after a healthy app window and he
 ## Version/release process
 
 1. Read repository HEAD, handoff, releases and CI first. Prefer newer confirmed source over this local tree.
-2. Keep version consistent in update_core.h, main.cpp window title, app.rc numeric/string versions, package.json/lockfile and release notes. Never reuse a published version or overwrite a release asset.
+2. Keep version consistent in src/update_core.h, src/main.cpp window title, assets/app.rc numeric/string versions, package.json/lockfile and release notes. Never reuse a published version or overwrite a release asset.
 3. First authorized source sync must include source, vendored licenses/SDK, tests, icons, scripts, AGENTS.md, handoff and workflow. Exclude generated EXEs, objects, QA PDFs, local profiles, node_modules and release staging from Git source. Release assets contain the build output.
 4. Run tests on the exact source. Public publication is authorized in this conversation. Let the main-branch Windows workflow run and inspect its exact commit and all results before tagging.
 5. If tests pass and release publication is authorized, use a main-branch commit marked [release]. After the checks pass, the workflow creates the versioned tag/release against that exact commit, only if the release does not exist. Direct version tags and explicit workflow-dispatch publication are also supported. It uses GitHub's scoped ephemeral workflow token, not an embedded app credential.
@@ -69,7 +69,7 @@ python3 scripts/verify_artifacts.py
 
 The Windows workflow builds fixture EXEs and tests/update_native.exe. The native suite includes a missing-HWND timer negative control, real timers/elapsed time, startup single flight, focus return after two minutes, five-minute polling, actual HTTPS checks, x64 PE identity, helper replacement, unhealthy-child rollback, custom launch filename, one backup, preserved settings sentinel and deferred cleanup. It takes about nine minutes. The separate Windows smoke script starts the actual WebView2 calculator and requires visible-window/render/JS health confirmation. Test fixtures and QA executables never enter release packages.
 
-Local validation performed in this environment is recorded in LOCAL_VALIDATION.md. The earlier local candidate was cross-compiled. The released EXE was subsequently built and tested on hosted Windows Server 2025. Native install/rollback fixtures, real timer/focus checks, actual HTTPS error handling, and the actual WebView2 app startup/render/JS health check all passed. Actual released 1.6.0-to-1.6.1 download/install/restart through the app UI, project/theme/window preservation, C:-to-D: staging, one backup and helper cleanup subsequently passed. Controlled shared-IP throttling/TLS/ETag scenarios and manual Windows 10/11 UI/native file-dialog/printer checks remain unverified. Do not report these as passed.
+Local validation performed in this environment is recorded in docs/LOCAL_VALIDATION.md. The earlier local candidate was cross-compiled. The released EXE was subsequently built and tested on hosted Windows Server 2025. Native install/rollback fixtures, real timer/focus checks, actual HTTPS error handling, and the actual WebView2 app startup/render/JS health check all passed. Actual released 1.6.0-to-1.6.1 download/install/restart through the app UI, project/theme/window preservation, C:-to-D: staging, one backup and helper cleanup subsequently passed. Controlled shared-IP throttling/TLS/ETag scenarios and manual Windows 10/11 UI/native file-dialog/printer checks remain unverified. Do not report these as passed.
 
 ## Windows acceptance checklist before claiming readiness
 
@@ -83,7 +83,7 @@ Local validation performed in this environment is recorded in LOCAL_VALIDATION.m
 
 ## Publication validation history
 
-The first hosted Windows run (40157804260, source a602ab249e8e3ab639f9285c50f367497b6e81eb) failed before compilation because build_assets.py relied on the platform default cp1252 text encoding. This is the negative control. The fix explicitly reads/writes UTF-8 and writes LF bundle output; the Windows build selects its native MinGW tools explicitly. Release assets are enumerated explicitly for PowerShell. The corrected Windows run 40157955595 passed every step, including release publication.
+The first hosted Windows run (40157804260, source a602ab249e8e3ab639f9285c50f367497b6e81eb) failed before compilation because scripts/build_assets.py relied on the platform default cp1252 text encoding. This is the negative control. The fix explicitly reads/writes UTF-8 and writes LF bundle output; the Windows build selects its native MinGW tools explicitly. Release assets are enumerated explicitly for PowerShell. The corrected Windows run 40157955595 passed every step, including release publication.
 
 ## Historical verified release v1.6.0
 
@@ -122,3 +122,11 @@ For the next release, increment native fixture versions above the app version. A
 ## README refresh (2026-10-25)
 
 Documentation-only update: reorganized the root README around the existing app icon, release downloads, numbered first-run steps, features, settings and update guidance. Claims were checked against current source, workflows and release metadata. Application source, versions, tags, release assets and repository access are unchanged. This documentation pass did not rerun physical printing or manual Windows PC tests; existing qualification limits above still apply.
+
+## Repository layout (2026-10-26)
+
+The root is reserved for README.md, AGENTS.md, DEVELOPMENT_HANDOFF.md, manifests, build entry points and the existing tool configuration. src/ holds native host and desktop bridge source; web/ holds calculator UI; assets/ holds icons/resources; scripts/ holds build/package tooling; tests/ holds regression suites; sdk/ and vendor/ hold dependencies. Supplementary guides belong in docs/. Current release notes are docs/releases/RELEASE_NOTES.md; before the next app release archive the previous notes as docs/releases/v<version>.md. Never add versioned notes or build outputs at the root. Keep published package filenames unchanged.
+
+Run `node scripts/check-layout.cjs` before committing; CI rejects unexpected tracked or unignored root entries. Layout-only changes do not increment the app version, create tags/releases, or replace published assets. Do not use a release-trigger commit marker or a release branch for cleanup work.
+
+This layout-only revision preserves app version 1.6.1, all published assets and the native update identity. Local layout negative controls, calculator/UV/updater JavaScript checks and portable C++ policy/placement tests pass. The Windows workflow validates native build/install/rollback before promotion. Source archives without .git are supported by the layout guard. No new app release is authorized by this cleanup.

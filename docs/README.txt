@@ -51,7 +51,7 @@ STANDALONE HTML
 3D_Print_Quote_Calculator_Offline.html contains the browser edition with all assets embedded. It does not require WebView2 Runtime. Open it in a current browser. Browser downloads and PDF handling apply in that edition.
 
 EDITABLE ICON
-Print_Quote_Icon.svg is the editable vector master. PNG and multi-size ICO exports are included. app.rc embeds the icon during compilation. No finished executable is patched, and no icon file is required beside the executable.
+Print_Quote_Icon.svg is the editable vector master. PNG and multi-size ICO exports are included. assets/app.rc embeds the icon during compilation. No finished executable is patched, and no icon file is required beside the executable.
 
 BUILD
 Requirements: Python 3 and a MinGW-w64 x64 C++17 compiler with windres. All source headers and the Microsoft loader are included, so the build needs no dependency downloads.
@@ -59,14 +59,14 @@ Requirements: Python 3 and a MinGW-w64 x64 C++17 compiler with windres. All sour
 On Windows, run build.cmd with g++ and windres on PATH.
 On Linux, use build.sh with a MinGW-w64 compiler; CXX and WINDRES can point to the installed tools.
 
-build_assets.py builds the embedded document and standalone HTML from web/. bridge.js supplies the restricted WebView2 message channel. main.cpp provides the host, offline page response, native Save As operations, runtime detection, settings migration, title-bar theme, single-instance handling and window placement. The app serves only its embedded page and blocks external navigation and network requests from the page.
+scripts/build_assets.py builds the embedded document and standalone HTML from web/. src/bridge.js supplies the restricted WebView2 message channel. src/main.cpp provides the host, offline page response, native Save As operations, runtime detection, settings migration, title-bar theme, single-instance handling and window placement. The app serves only its embedded page and blocks external navigation and network requests from the page.
 
 TESTS
-For the JavaScript integration checks, install jsdom@26.1.0 in a temporary test environment, then run test_webview.cjs. These checks execute the actual embedded page with a simulated WebView2 native channel. They cover migration, rates, quotes, PDF generation with a logo, PDF cancellation and errors, the print request, converters, a zero custom price, settings export, menus, theme changes and localStorage persistence across a reload.
+For the JavaScript integration checks, install jsdom@26.1.0 in a temporary test environment, then run tests/test_webview.cjs. These checks execute the actual embedded page with a simulated WebView2 native channel. They cover migration, rates, quotes, PDF generation with a logo, PDF cancellation and errors, the print request, converters, a zero custom price, settings export, menus, theme changes and localStorage persistence across a reload.
 
-Run test_uv.cjs with the same test environment for UV total/per-channel ink costing, subscription and bundle rates, bundle allocation validation, pack unit costs, whole-job blank quantities, printer profile isolation, PDF generation, UV settings transfer and legacy imports.
+Run tests/test_uv.cjs with the same test environment for UV total/per-channel ink costing, subscription and bundle rates, bundle allocation validation, pack unit costs, whole-job blank quantities, printer profile isolation, PDF generation, UV settings transfer and legacy imports.
 
-check_placement.cpp is a portable test of placement persistence and monitor recovery. Build with a standard C++17 compiler and -Ivendor.
+tests/check_placement.cpp is a portable test of placement persistence and monitor recovery. Build with a standard C++17 compiler and -Ivendor -I..
 
 The released executable was built in Windows CI. Native install/rollback, real timers/focus, and actual WebView2 startup/render/JS health checks passed. Manual Windows 10/11 file dialogs, printers, display configurations, controlled throttling/TLS/ETag scenarios remain unverified. The actual published 1.6.0-to-1.6.1 in-app upgrade, C:-to-D: staging, project/theme/window preservation and cleanup passed Windows qualification. See DEVELOPMENT_HANDOFF.md for the exact release commit and CI evidence.
 

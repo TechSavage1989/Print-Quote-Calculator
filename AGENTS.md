@@ -16,3 +16,9 @@ Settings and runtime files belong in existing per-user app storage. Keep one rol
 Before claiming a release ready, verify hosted CI, exact tag/commit, assets, hashes and the real Windows upgrade/rollback path. Linux cross-compilation is not Windows execution. Record limitations honestly in DEVELOPMENT_HANDOFF.md and the final response.
 
 No server setup, Codex CLI automation, unattended workers, payments or API account setup. No subagents unless the user asks.
+
+## Repository layout (2026-10-26)
+
+The root is reserved for README.md, AGENTS.md, DEVELOPMENT_HANDOFF.md, manifests, build entry points and the existing tool configuration. src/ holds native host and desktop bridge source; web/ holds calculator UI; assets/ holds icons/resources; scripts/ holds build/package tooling; tests/ holds regression suites; sdk/ and vendor/ hold dependencies. Supplementary guides belong in docs/. Current release notes are docs/releases/RELEASE_NOTES.md; before the next app release archive the previous notes as docs/releases/v<version>.md. Never add versioned notes or build outputs at the root. Keep published package filenames unchanged.
+
+Run `node scripts/check-layout.cjs` before committing; CI rejects unexpected tracked or unignored root entries. Layout-only changes do not increment the app version, create tags/releases, or replace published assets. Do not use a release-trigger commit marker or a release branch for cleanup work.

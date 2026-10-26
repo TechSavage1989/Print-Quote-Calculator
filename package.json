@@ -4,7 +4,9 @@
   "private": true,
   "description": "Offline WebView2 calculator integration tests",
   "scripts": {
-    "test": "node test_webview.cjs && node test_uv.cjs && node tests/update_ui.cjs"
+    "test": "node scripts/check-layout.cjs && node scripts/test-layout.cjs && node tests/test_webview.cjs && node tests/test_uv.cjs && node tests/update_ui.cjs"
   },
-  "devDependencies": { "jsdom": "26.1.0" }
+  "devDependencies": {
+    "jsdom": "26.1.0"
+  }
 }

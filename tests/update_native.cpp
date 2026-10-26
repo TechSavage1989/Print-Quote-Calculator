@@ -1,6 +1,6 @@
 // Reuse the production host/updater. This console test is never shipped.
 #define wWinMain ProductionEntry
-#include "../main.cpp"
+#include "../src/main.cpp"
 #undef wWinMain
 #include <iostream>
 #include <cassert>

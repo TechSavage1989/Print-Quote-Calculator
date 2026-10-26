@@ -1,8 +1,8 @@
 #define RT_MANIFEST 24
-101 ICON "Print_Quote_Icon.ico"
+101 ICON "assets/Print_Quote_Icon.ico"
 201 RCDATA "embedded.html"
 202 RCDATA "sdk/WebView2Loader.dll"
-1 RT_MANIFEST "app.manifest"
+1 RT_MANIFEST "assets/app.manifest"
 1 VERSIONINFO
 FILEVERSION 1,6,1,0
 PRODUCTVERSION 1,6,1,0

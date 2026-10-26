@@ -1,7 +1,7 @@
 name: Windows portable build and tests
 on:
   push:
-    branches: [main]
+    branches: [main, "cleanup/repository-layout-20261026"]
     paths-ignore: ['tests/qualify_release.ps1', '.github/workflows/qualify-updater.yml']
     tags: ['v*']
   pull_request:
@@ -22,6 +22,10 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: '24'
+      - name: Enforce compact repository layout
+        run: |
+          node scripts/check-layout.cjs
+          node scripts/test-layout.cjs
       - uses: msys2/setup-msys2@v2
         with:
           msystem: UCRT64
@@ -31,18 +35,18 @@ jobs:
         shell: msys2 {0}
         run: |
           CXX=g++ WINDRES=windres bash build.sh
-          g++ -std=c++17 -O2 -Ivendor tests/update_core.cpp -o tests/update_core.exe
+          g++ -std=c++17 -O2 -Ivendor -I. tests/update_core.cpp -o tests/update_core.exe
           tests/update_core.exe
           windres tests/update_fixture.rc -O coff -o tests/update_fixture.o
           g++ -std=c++17 -Os -static -municode -mwindows tests/update_fixture.cpp tests/update_fixture.o -o tests/update_fixture.exe
           g++ -std=c++17 -Os -static -municode -mwindows -DFAIL_HEALTH tests/update_fixture.cpp tests/update_fixture.o -o tests/update_fixture_unhealthy.exe
-          g++ -std=c++17 -O1 -static -municode -Ivendor tests/update_native.cpp app.o -o tests/update_native.exe -lcomdlg32 -lole32 -lshell32 -lshlwapi -ldwmapi -lcrypt32 -luuid -lwinhttp -lbcrypt -lversion -lgdi32
+          g++ -std=c++17 -O1 -static -municode -Ivendor -I. tests/update_native.cpp app.o -o tests/update_native.exe -lcomdlg32 -lole32 -lshell32 -lshlwapi -ldwmapi -lcrypt32 -luuid -lwinhttp -lbcrypt -lversion -lgdi32
       - name: JavaScript integration checks
         shell: pwsh
         run: |
           npm ci
-          node test_webview.cjs
-          node test_uv.cjs
+          node tests/test_webview.cjs
+          node tests/test_uv.cjs
           node tests/update_ui.cjs
       - name: Actual Windows install, rollback, timer and focus checks
         shell: pwsh
@@ -74,7 +78,7 @@ jobs:
           gh release view $tag *> $null
           if ($LASTEXITCODE -eq 0) { throw 'Release already exists; never overwrite published assets.' }
           $notes = Join-Path $env:RUNNER_TEMP 'release-notes.md'
-          Get-Content RELEASE_NOTES.md -Raw | Set-Content $notes
+          Get-Content docs/releases/RELEASE_NOTES.md -Raw | Set-Content $notes
           Add-Content $notes "`nSource commit: $env:GITHUB_SHA`nWindows CI: https://github.com/$env:GITHUB_REPOSITORY/actions/runs/$env:GITHUB_RUN_ID"
           $assets = @(Get-ChildItem release -File | ForEach-Object { $_.FullName })
           gh release create $tag @assets --target $env:GITHUB_SHA --title "Print Quote Calculator $($manifest.version)" --notes-file $notes

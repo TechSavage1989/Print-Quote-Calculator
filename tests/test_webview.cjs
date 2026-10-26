@@ -2,13 +2,13 @@
 // Exercises the actual bundled document with a simulated WebView2 message channel.
 const fs=require('node:fs'),path=require('node:path'),assert=require('node:assert/strict');
 const {JSDOM,VirtualConsole}=require('jsdom');
-const PrintCalc=require('./web/calculator.js');
-const PDFLib=require('./web/vendor/pdf-lib.min.js');
-const page=fs.readFileSync(path.join(__dirname,'embedded.html'),'utf8');
+const PrintCalc=require('../web/calculator.js');
+const PDFLib=require('../web/vendor/pdf-lib.min.js');
+const page=fs.readFileSync(path.join(__dirname,'../embedded.html'),'utf8');
 const seed={mode:'resin',theme:'dark',states:{resin:PrintCalc.defaults('resin'),fdm:PrintCalc.defaults('fdm')},logo:null};
 Object.assign(seed.states.resin,{name:'WebView2 regression quote',material:100,printH:2,laborM:15,extraM:30,batch:3,margin:30,extras:4,shipping:6});
 // A real PNG exercises logo persistence and the PDF image path.
-seed.logo='data:image/png;base64,'+fs.readFileSync(path.join(__dirname,'Print_Quote_Icon.png')).toString('base64');
+seed.logo='data:image/png;base64,'+fs.readFileSync(path.join(__dirname,'../assets/Print_Quote_Icon.png')).toString('base64');
 const errors=[],files=[],themes=[];let nextResult={saved:true},listener;
 function create(existing,initial=seed){
  const console=new VirtualConsole();console.on('jsdomError',error=>errors.push(error.message));
@@ -70,7 +70,7 @@ function input(w,id,value){const el=w.document.getElementById(id);el.value=value
  await until(()=>$('material'));assert.equal($('fdm').getAttribute('aria-pressed'),'true');assert.equal($('customPrice').value,'0');assert(!w.document.body.classList.contains('dark'));
  assert.equal(JSON.parse(w.localStorage.getItem('print-quote-v1')).logo,seed.logo);dom.window.close();
  // The browser edition must not depend on the desktop host.
- assert(!fs.readFileSync(path.join(__dirname,'3D_Print_Quote_Calculator_Offline.html'),'utf8').includes('window.desktopAPI'));
+ assert(!fs.readFileSync(path.join(__dirname,'../3D_Print_Quote_Calculator_Offline.html'),'utf8').includes('window.desktopAPI'));
  assert.deepEqual(errors,[]);
  console.log('PASS: actual bundled app loads; native settings/logo migration; quote math; PDF with logo; export cancellation/error; print bridge; converters; custom price zero; settings menu/export; theme; restart persistence; standalone HTML independence.');
 })().catch(error=>{console.error(error);process.exitCode=1;});

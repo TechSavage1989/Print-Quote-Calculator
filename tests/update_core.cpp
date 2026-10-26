@@ -1,4 +1,4 @@
-#include "../update_core.h"
+#include "../src/update_core.h"
 #include <cassert>
 #include <iostream>
 using namespace updates;

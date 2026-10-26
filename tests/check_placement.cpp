@@ -16,7 +16,7 @@ bool GetMonitorInfoW(HMONITOR,MONITORINFO*p){p->rcWork=work;return true;}
 bool IntersectRect(RECT*out,RECT*a,RECT*b){out->left=std::max(a->left,b->left);out->top=std::max(a->top,b->top);out->right=std::min(a->right,b->right);out->bottom=std::min(a->bottom,b->bottom);if(out->right<=out->left||out->bottom<=out->top){*out={};return false;}return true;}
 bool SetWindowPlacement(HWND,WINDOWPLACEMENT*p){actual=*p;return true;}
 void ShowWindow(HWND,int cmd){shown=cmd;}
-#include "placement.h"
+#include "../src/placement.h"
 int main(){json config={{"window",{{"x",123},{"y",87},{"width",1150},{"height",740},{"maximized",false}}}};loadPlacement(config);assert(havePlacement);restorePlacement(mainWindow);assert(shown==SW_SHOWNORMAL);assert(actual.rcNormalPosition.left==123&&actual.rcNormalPosition.top==87);assert(actual.rcNormalPosition.right-actual.rcNormalPosition.left==1150);json saved;addPlacement(saved);assert(saved["window"]["x"]==123&&saved["window"]["height"]==740);
 actual.showCmd=SW_SHOWMINIMIZED;actual.flags=WPF_RESTORETOMAXIMIZED;capturePlacement();restorePlacement(mainWindow);assert(shown==SW_SHOWMAXIMIZED);
 config["window"]["x"]=3500;config["window"]["y"]=2000;config["window"]["maximized"]=false;loadPlacement(config);restorePlacement(mainWindow);assert(actual.rcNormalPosition.right<=work.right&&actual.rcNormalPosition.bottom<=work.bottom);assert(actual.rcNormalPosition.left>=work.left&&actual.rcNormalPosition.top>=work.top);

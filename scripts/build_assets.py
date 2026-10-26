@@ -2,7 +2,7 @@
 from pathlib import Path
 import re
 
-ROOT = Path(__file__).resolve().parent
+ROOT = Path(__file__).resolve().parent.parent
 
 def bundle(desktop=False):
     html = (ROOT / 'web/index.html').read_text(encoding="utf-8")
@@ -43,9 +43,9 @@ def bundle(desktop=False):
         code = re.sub(r'</script', r'<\\/script', code, flags=re.I)
         html = html.replace(f'<script src="{name}"></script>', '<script>' + code + '</script>')
     if desktop:
-        bridge = (ROOT / 'bridge.js').read_text(encoding="utf-8")
+        bridge = (ROOT / 'src/bridge.js').read_text(encoding="utf-8")
         html = html.replace('</head>', '<script>' + bridge + '</script></head>')
-        html = html.replace('</body>', '<script>' + (ROOT / 'updater_ui.js').read_text(encoding="utf-8") + '</script></body>')
+        html = html.replace('</body>', '<script>' + (ROOT / 'src/updater_ui.js').read_text(encoding="utf-8") + '</script></body>')
     assert not re.search(r'<script[^>]+src=', html)
     assert not re.search(r'<link[^>]+stylesheet', html)
     return html

@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="Print_Quote_Icon.png" alt="Print Quote Calculator icon" width="112">
+  <img src="assets/Print_Quote_Icon.png" alt="Print Quote Calculator icon" width="112">
 </p>
 
 <h1 align="center">Print Quote Calculator</h1>
@@ -104,6 +104,10 @@ Windows users can run `build.cmd`. The Windows workflow also tests native instal
 - [1.6.1 Windows build and tests](https://github.com/TechSavage1989/Print-Quote-Calculator/actions/runs/40159326458).
 - [Published 1.6.0 → 1.6.1 UI upgrade qualification](https://github.com/TechSavage1989/Print-Quote-Calculator/actions/runs/40160208389): project/theme/window preservation, cross-volume staging and cleanup.
 - [Development handoff](DEVELOPMENT_HANDOFF.md): exact source, hashes, release process and remaining transport/recovery qualification.
-- [Local validation](LOCAL_VALIDATION.md): local checks and limits.
+- [Local validation](docs/LOCAL_VALIDATION.md): local checks and limits.
 
 </details>
+
+### Source organization
+
+src/ holds native host and desktop bridge source; web/ holds calculator UI; assets/ holds icons/resources; scripts/ holds build/package tooling; tests/ holds regression suites; sdk/ and vendor/ hold dependencies. See [development handoff](DEVELOPMENT_HANDOFF.md) and [release notes](docs/releases/RELEASE_NOTES.md).
