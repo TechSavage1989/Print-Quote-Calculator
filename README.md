@@ -3,14 +3,19 @@
 </p>
 
 <h1 align="center">Print Quote Calculator</h1>
-
 <p align="center">Turn Resin, FDM and UV print estimates into clear, itemized quotes.</p>
 
 <p align="center">
-  <a href="#download">Download</a> · <a href="#getting-started">Get started</a> · <a href="#features">Features</a> · <a href="#updates-and-settings">Updates</a> · <a href="#development">Development</a>
+  <a href="https://github.com/TechSavage1989/Print-Quote-Calculator/releases/latest">Download</a> ·
+  <a href="#getting-started">Get started</a> ·
+  <a href="#features">Features</a> ·
+  <a href="#screenshots">Screenshots</a> ·
+  <a href="#development">Development</a>
 </p>
 
----
+<p align="center">
+  <img src="docs/images/hero.png" alt="Print Quote Calculator main window" width="900">
+</p>
 
 ## Features
 
@@ -22,6 +27,20 @@
 - **UV tools:** ink subscription/bundle presets, per-channel costs, reference-print estimates and substrate pack costing.
 - **Everyday helpers:** length/filament converters, light/dark themes and settings import/export.
 - **Offline calculation:** calculator assets and the PDF library run locally.
+
+## Screenshots
+
+**FDM quote in dark mode, with a custom-price comparison**
+
+<img src="docs/images/fdm-dark-mode.png" alt="FDM quote in dark mode, with a custom-price comparison" width="900">
+
+**UV printing quote with blanks and ink costs**
+
+<img src="docs/images/uv-printing.png" alt="UV printing quote with blanks and ink costs" width="900">
+
+**UV ink estimate from a reference print**
+
+<img src="docs/images/uv-ink-estimate.png" alt="UV ink estimate from a reference print" width="900">
 
 ## Download
 
