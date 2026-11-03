@@ -2,7 +2,7 @@
 const fs=require('node:fs');
 const {execFileSync}=require('node:child_process');
 const path=require('node:path');
-const allowed=new Set(['.github','.gitignore','AGENTS.md','DEVELOPMENT_HANDOFF.md','README.md','assets','build.cmd','build.sh','docs','package-lock.json','package.json','scripts','sdk','src','tests','vendor','web']);
+const allowed=new Set(['.github','.gitignore','AGENTS.md','CLAUDE.md','DEVELOPMENT_HANDOFF.md','README.md','assets','build.cmd','build.sh','docs','package-lock.json','package.json','scripts','sdk','src','tests','vendor','web']);
 function check(root){
  let entries;
  if(fs.existsSync(path.join(root,'.git'))){
