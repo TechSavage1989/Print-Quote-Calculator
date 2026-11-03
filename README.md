@@ -30,17 +30,36 @@
 
 ## Screenshots
 
-**FDM quote in dark mode, with a custom-price comparison**
+### Estimate costs
 
-<img src="docs/images/fdm-dark-mode.png" alt="FDM quote in dark mode, with a custom-price comparison" width="900">
+<table>
+<tr><td width="50%" valign="top"><b>FDM quote in dark mode, with a custom-price comparison</b><br><img src="docs/images/fdm-dark-mode.png" alt="FDM quote in dark mode, with a custom-price comparison" width="440"></td><td width="50%" valign="top"><b>Saved rates: material, labor, printer and electricity costs per print type</b><br><img src="docs/images/settings-saved-rates.png" alt="Saved rates: material, labor, printer and electricity costs per print type" width="440"></td></tr>
+</table>
 
-**UV printing quote with blanks and ink costs**
+### Set your price
 
-<img src="docs/images/uv-printing.png" alt="UV printing quote with blanks and ink costs" width="900">
+<table>
+<tr><td width="50%" valign="top"><b>Fee settings: selling-channel fees and adjustments</b><br><img src="docs/images/settings-fee-settings.png" alt="Fee settings: selling-channel fees and adjustments" width="440"></td><td width="50%" valign="top"><b>Converters: length units and filament length to weight</b><br><img src="docs/images/converters.png" alt="Converters: length units and filament length to weight" width="440"></td></tr>
+</table>
 
-**UV ink estimate from a reference print**
+### Share the quote
 
-<img src="docs/images/uv-ink-estimate.png" alt="UV ink estimate from a reference print" width="900">
+<table>
+<tr><td width="50%" valign="top"><b>Export logo: your own logo for the PDF header</b><br><img src="docs/images/settings-export-logo.png" alt="Export logo: your own logo for the PDF header" width="440"></td><td width="50%" valign="top"><b>The exported PDF quote, with the logo and itemized costs</b><br><img src="docs/images/pdf-quote.png" alt="The exported PDF quote, with the logo and itemized costs" width="440"></td></tr>
+</table>
+
+### UV printing tools
+
+<table>
+<tr><td width="50%" valign="top"><b>UV printing quote with blanks and ink costs</b><br><img src="docs/images/uv-printing.png" alt="UV printing quote with blanks and ink costs" width="440"></td><td width="50%" valign="top"><b>UV ink estimate from a reference print</b><br><img src="docs/images/uv-ink-estimate.png" alt="UV ink estimate from a reference print" width="440"></td></tr>
+<tr><td width="50%" valign="top"><b>Per-ink usage, with optional rate overrides</b><br><img src="docs/images/uv-per-ink-costs.png" alt="Per-ink usage, with optional rate overrides" width="440"></td><td width="50%" valign="top"><b>Blank / substrate unit cost from a pack price</b><br><img src="docs/images/uv-pack-cost.png" alt="Blank / substrate unit cost from a pack price" width="440"></td></tr>
+</table>
+
+### Settings and help
+
+<table>
+<tr><td width="50%" valign="top"><b>Settings transfer: export and import rates, project inputs and logo</b><br><img src="docs/images/settings-transfer.png" alt="Settings transfer: export and import rates, project inputs and logo" width="440"></td><td width="50%" valign="top"><b>Quick guide: how the quote is worked out</b><br><img src="docs/images/settings-quick-guide.png" alt="Quick guide: how the quote is worked out" width="440"></td></tr>
+</table>
 
 ## Download
 
